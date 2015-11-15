@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "description": "A game idea by Jonas.",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "start": "http-server ./browser -o"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jacobcarpenter/space-delivery.git"
@@ -15,6 +17,7 @@
   },
   "homepage": "https://github.com/jacobcarpenter/space-delivery#readme",
   "devDependencies": {
+    "http-server": "^0.8.5",
     "jspm": "^0.16.14"
   },
   "jspm": {

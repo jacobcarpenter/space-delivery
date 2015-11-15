@@ -22,6 +22,9 @@ function create() {
 	ship = game.add.graphics(20, height / 2 - shipHeight / 2);
 	ship.beginFill(0xFFFFFF, 0xFF);
 	ship.drawRect(0, 0, shipWidth, shipHeight);
+
+	ship.beginFill(0x999900, 0xFF);
+	ship.drawPolygon(new Phaser.Polygon({ x: shipWidth, y: 0 }, { x: shipWidth + 50, y: shipHeight / 2 }, { x: shipWidth, y: shipHeight }));
 }
 
 function update() {
@@ -32,11 +35,11 @@ function update() {
 		}
 	}
 
-	if (game.rnd.integerInRange(1, 20) === 1) {
+	if (game.rnd.integerInRange(1, 15) === 1) {
 		// add a star
 		let star = backgroundStars.create(width, game.rnd.integerInRange(0, height), '');
 
-		const isClose = game.rnd.integerInRange(1, 5) <= 2;
+		const isClose = game.rnd.integerInRange(1, 7) <= 2;
 
 		star.body.velocity.x = isClose ? -200 : -120;
 

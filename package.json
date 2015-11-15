@@ -1,0 +1,18 @@
+{
+  "name": "space-delivery",
+  "version": "0.1.0",
+  "description": "A game idea by Jonas.",
+  "main": "index.js",
+  "scripts": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jacobcarpenter/space-delivery.git"
+  },
+  "author": "Jonas Carpenter & Jacob Carpenter",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jacobcarpenter/space-delivery/issues"
+  },
+  "homepage": "https://github.com/jacobcarpenter/space-delivery#readme"
+}

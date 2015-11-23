@@ -1,10 +1,14 @@
 import { Phaser } from 'phaser';
+import { createMeteors, cleanUpMeteors } from './meteors';
+import { createStars, cleanUpStars } from './stars';
 
-const width = 480;
-const height = 300;
+export const width = 480;
+export const height = 300;
 
 const shipHeight = 40;
 const shipWidth = 120;
+
+const shipInputVelocity = 300;
 
 const game = new Phaser.Game(width, height, Phaser.CANVAS, '', {
 	create,
@@ -13,43 +17,45 @@ const game = new Phaser.Game(width, height, Phaser.CANVAS, '', {
 
 let ship;
 let backgroundStars;
+let meteors;
+let cursors;
 
 function create() {
+	cursors = game.input.keyboard.createCursorKeys();
+
 	backgroundStars = game.add.group();
 	backgroundStars.enableBody = true;
 	backgroundStars.physicsBodyType = Phaser.Physics.ARCADE;
 
-	ship = game.add.graphics(20, height / 2 - shipHeight / 2);
-	ship.beginFill(0xFFFFFF, 0xFF);
-	ship.drawRect(0, 0, shipWidth, shipHeight);
+	ship = game.add.sprite(20, height / 2 - shipHeight / 2);
+	game.physics.enable(ship);
 
-	ship.beginFill(0x999900, 0xFF);
-	ship.drawPolygon(new Phaser.Polygon({ x: shipWidth, y: 0 }, { x: shipWidth + 50, y: shipHeight / 2 }, { x: shipWidth, y: shipHeight }));
+	let shipGraphics = game.add.graphics();
+	ship.addChild(shipGraphics);
+
+	shipGraphics.beginFill(0xFFFFFF, 0xFF);
+	shipGraphics.drawRect(0, 0, shipWidth, shipHeight);
+
+	shipGraphics.beginFill(0x999900, 0xFF);
+	shipGraphics.drawPolygon(new Phaser.Polygon({ x: shipWidth, y: 0 }, { x: shipWidth + 50, y: shipHeight / 2 }, { x: shipWidth, y: shipHeight }));
+
+	meteors = game.add.group();
+	meteors.enableBody = true;
+	meteors.physicsBodyType = Phaser.Physics.ARCADE;
 }
 
 function update() {
-	// remove off-screen stars
-	for (let star of backgroundStars.children) {
-		if (star.body.x < game.camera.x) {
-			star.destroy();
-		}
+	ship.body.velocity.y = 0;
+	if (cursors.up.isDown) {
+		ship.body.velocity.y -= shipInputVelocity;
+	}
+	if (cursors.down.isDown) {
+		ship.body.velocity.y += shipInputVelocity;
 	}
 
-	if (game.rnd.integerInRange(1, 15) === 1) {
-		// add a star
-		let star = backgroundStars.create(width, game.rnd.integerInRange(0, height), '');
+	cleanUpStars(game, backgroundStars);
+	cleanUpMeteors(game, meteors);
 
-		const isClose = game.rnd.integerInRange(1, 7) <= 2;
-
-		star.body.velocity.x = isClose ? -200 : -120;
-
-		let starGraphics = new Phaser.Graphics(game, 0, 0);
-		star.addChild(starGraphics);
-
-		starGraphics.beginFill(0xFFFFFF, 0xFF);
-		if (isClose)
-			starGraphics.drawRect(0, 0, 4, 4);
-		else
-			starGraphics.drawRect(0, 0, 2, 2);
-	}
+	createStars(game, backgroundStars);
+	createMeteors(game, meteors);
 }
